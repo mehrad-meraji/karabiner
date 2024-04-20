@@ -35,10 +35,10 @@ type FrontMostApplicationCondition = {
 
 type DeviceCondition = {
   type:
-    | "device_if"
-    | "device_unless"
-    | "device_exists_if"
-    | "device_exists_unless";
+  | "device_if"
+  | "device_unless"
+  | "device_exists_if"
+  | "device_exists_unless";
   identifiers: Identifiers;
   description?: string;
 };
@@ -105,6 +105,11 @@ export interface Modifiers {
   mandatory?: string[];
 }
 
+export interface NotificationMesage {
+  id: string;
+  text: string;
+}
+
 export interface To {
   key_code?: KeyCode;
   modifiers?: string[];
@@ -121,6 +126,7 @@ export interface To {
    * @see: {@link https://karabiner-elements.pqrs.org/docs/json/complex-modifications-manipulator-definition/to/software_function/iokit_power_management_sleep_system/}
    */
   software_function?: SoftwareFunction;
+  set_notification_message?: NotificationMesage;
 }
 
 export interface MouseKey {

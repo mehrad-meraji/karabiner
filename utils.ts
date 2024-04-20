@@ -113,35 +113,35 @@ export function createHyperSubLayers(subLayers: {
   return Object.entries(subLayers).map(([key, value]) =>
     "to" in value
       ? {
-          description: `Hyper Key + ${key}`,
-          manipulators: [
-            {
-              ...value,
-              type: "basic" as const,
-              from: {
-                key_code: key as KeyCode,
-                modifiers: {
-                  optional: ["any"],
-                },
+        description: `Hyper Key + ${key}`,
+        manipulators: [
+          {
+            ...value,
+            type: "basic" as const,
+            from: {
+              key_code: key as KeyCode,
+              modifiers: {
+                optional: ["any"],
               },
-              conditions: [
-                {
-                  type: "variable_if",
-                  name: "hyper",
-                  value: 1,
-                },
-              ],
             },
-          ],
-        }
+            conditions: [
+              {
+                type: "variable_if",
+                name: "hyper",
+                value: 1,
+              },
+            ],
+          },
+        ],
+      }
       : {
-          description: `Hyper Key sublayer "${key}"`,
-          manipulators: createHyperSubLayer(
-            key as KeyCode,
-            value,
-            allSubLayerVariables
-          ),
-        }
+        description: `Hyper Key sublayer "${key}"`,
+        manipulators: createHyperSubLayer(
+          key as KeyCode,
+          value,
+          allSubLayerVariables
+        ),
+      }
   );
 }
 
@@ -149,6 +149,24 @@ function generateSubLayerVariableName(key: KeyCode) {
   return `hyper_sublayer_${key}`;
 }
 
+export function setHyperLayer(active = false) {
+  return [
+    {
+      set_variable: {
+        name: "hyper",
+        value: active ? 1 : 0
+      }
+    },
+    {
+      // Show the notification message
+      set_notification_message: {
+        id: "org.pqrs.notificaion_message_example",
+        text: active ? "Hyper Layer" : ""
+      }
+    }
+
+  ]
+}
 /**
  * Shortcut for "open" shell command
  */
@@ -158,6 +176,7 @@ export function open(what: string): LayerCommand {
       {
         shell_command: `open ${what}`,
       },
+      ...setHyperLayer()
     ],
     description: `Open ${what}`,
   };
@@ -172,6 +191,7 @@ export function rectangle(name: string): LayerCommand {
       {
         shell_command: `open -g rectangle://execute-action?name=${name}`,
       },
+      ...setHyperLayer()
     ],
     description: `Window: ${name}`,
   };

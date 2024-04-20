@@ -1,102 +1,100 @@
 import fs from "fs";
 import { KarabinerRules } from "./types";
-import { createHyperSubLayers, app, open, rectangle } from "./utils";
+import { createHyperSubLayers, app, open, rectangle, setHyperLayer } from "./utils";
 
 const rules: KarabinerRules[] = [
   // Define the Hyper key itself
   {
-    description: "Hyper Key (⌃⌥⇧⌘)",
+    description: "Hyper Key OFF (⌃⌥⇧⌘)",
     manipulators: [
       {
-        description: "Caps Lock -> Hyper Key",
+        description: "Right Shift -> Hyper Key",
         from: {
-          key_code: "caps_lock",
+          key_code: "right_shift",
           modifiers: {
             optional: ["any"],
           },
         },
         to: [
-          {
-            set_variable: {
-              name: "hyper",
-              value: 1,
-            },
-          },
+          ...setHyperLayer()
         ],
-        to_after_key_up: [
+        conditions: [
           {
-            set_variable: {
-              name: "hyper",
-              value: 0,
-            },
+            type: "variable_if",
+            name: "hyper",
+            value: 1
+          }
+        ],
+        type: "basic"
+      },
+    ],
+  },
+  {
+    description: "Hyper Key ON (⌃⌥⇧⌘)",
+    manipulators: [
+      {
+        description: "Right Shift -> Hyper Key",
+        from: {
+          key_code: "right_shift",
+          modifiers: {
+            optional: ["any"],
           },
+        },
+        to: [
+          ...setHyperLayer(true)
+        ],
+        type: "basic",
+      },
+    ],
+  },
+
+  {
+    description: "ESC, CTRL and CAPSLOCK",
+    manipulators: [
+      {
+        from: {
+          key_code: "caps_lock",
+          modifiers: {
+            optional: ["any"]
+          }
+        },
+        to: [
+          {
+            key_code: "left_control",
+          }
         ],
         to_if_alone: [
           {
             key_code: "escape",
-          },
+          }
         ],
-        type: "basic",
-      },
-      //      {
-      //        type: "basic",
-      //        description: "Disable CMD + Tab to force Hyper Key usage",
-      //        from: {
-      //          key_code: "tab",
-      //          modifiers: {
-      //            mandatory: ["left_command"],
-      //          },
-      //        },
-      //        to: [
-      //          {
-      //            key_code: "tab",
-      //          },
-      //        ],
-      //      },
+        type: "basic"
+      }
     ],
   },
   ...createHyperSubLayers({
-    spacebar: open(
-      "raycast://extensions/stellate/mxstbr-commands/create-notion-todo"
-    ),
+    // spacebar: open(
+    //   "raycast://extensions/stellate/mxstbr-commands/create-notion-todo"
+    // ),
     // b = "B"rowse
-    b: {
-      t: open("https://twitter.com"),
-      // Quarterly "P"lan
-      p: open("https://qrtr.ly/plan"),
-      y: open("https://news.ycombinator.com"),
-      f: open("https://facebook.com"),
-      r: open("https://reddit.com"),
-    },
+    // b: {
+    // t: open("https://twitter.com"),
+    // Quarterly "P"lan
+    // p: open("https://qrtr.ly/plan"),
+    // y: open("https://news.ycombinator.com"),
+    // f: open("https://facebook.com"),
+    // r: open("https://reddit.com"),
+    // },
     // o = "Open" applications
     o: {
-      1: app("1Password"),
-      g: app("Google Chrome"),
-      c: app("Notion Calendar"),
-      v: app("Visual Studio Code"),
-      d: app("Discord"),
+      1: app("Bitwarden"),
+      a: app("Arc"),
       s: app("Slack"),
-      e: app("Superhuman"),
-      n: app("Notion"),
-      t: app("Warp"),
-      // Open todo list managed via *H*ypersonic
-      h: open(
-        "notion://www.notion.so/stellatehq/7b33b924746647499d906c55f89d5026"
-      ),
+      o: app("Obsidian"),
+      t: app("Alacritty"),
       z: app("zoom.us"),
-      // "M"essages
-      m: app("Texts"),
       f: app("Finder"),
-      r: app("Texts"),
       // "i"Message
-      i: app("Texts"),
-      p: app("Spotify"),
-      a: app("iA Presenter"),
-      // "W"hatsApp has been replaced by Texts
-      w: open("Texts"),
-      l: open(
-        "raycast://extensions/stellate/mxstbr-commands/open-mxs-is-shortlink"
-      ),
     },
 
     // w = "Window" via rectangle.app
@@ -233,6 +231,7 @@ const rules: KarabinerRules[] = [
             key_code: "spacebar",
             modifiers: ["right_control", "right_command"],
           },
+          ...setHyperLayer()
         ],
       },
       // Turn on Elgato KeyLight
@@ -287,19 +286,19 @@ const rules: KarabinerRules[] = [
         to: [{ key_code: "page_up" }],
       },
     },
-
-    // c = Musi*c* which isn't "m" because we want it to be on the left hand
-    c: {
-      p: {
-        to: [{ key_code: "play_or_pause" }],
-      },
-      n: {
-        to: [{ key_code: "fastforward" }],
-      },
-      b: {
-        to: [{ key_code: "rewind" }],
-      },
-    },
+    //
+    // // c = Musi*c* which isn't "m" because we want it to be on the left hand
+    // c: {
+    //   p: {
+    //     to: [{ key_code: "play_or_pause" }],
+    //   },
+    //   n: {
+    //     to: [{ key_code: "fastforward" }],
+    //   },
+    //   b: {
+    //     to: [{ key_code: "rewind" }],
+    //   },
+    // },
 
     // r = "Raycast"
     r: {
@@ -312,7 +311,6 @@ const rules: KarabinerRules[] = [
       ),
       c: open("raycast://extensions/raycast/system/open-camera"),
       p: open("raycast://extensions/raycast/raycast/confetti"),
-      a: open("raycast://extensions/raycast/raycast-ai/ai-chat"),
       s: open("raycast://extensions/peduarte/silent-mention/index"),
       h: open(
         "raycast://extensions/raycast/clipboard-history/clipboard-history"
