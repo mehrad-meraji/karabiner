@@ -289,7 +289,7 @@
                 "description": "Open -a 'Obsidian.app'",
                 "type": "basic",
                 "from": {
-                  "key_code": "b",
+                  "key_code": "o",
                   "modifiers": {
                     "optional": [
                       "any"

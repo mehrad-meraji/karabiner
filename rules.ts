@@ -90,7 +90,7 @@ const rules: KarabinerRules[] = [
       1: app("Bitwarden"),
       a: app("Arc"),
       s: app("Slack"),
-      o: app("Obsidian"),
+      b: app("Obsidian"),
       t: app("Alacritty"),
       z: app("zoom.us"),
       f: app("Finder"),
