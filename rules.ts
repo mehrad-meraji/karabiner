@@ -244,19 +244,6 @@ const rules: KarabinerRules[] = [
       },
     },
 
-    // // c = Musi*c* which isn't "m" because we want it to be on the left hand
-    // c: {
-    //   p: {
-    //     to: [{ key_code: "play_or_pause" }],
-    //   },
-    //   n: {
-    //     to: [{ key_code: "fastforward" }],
-    //   },
-    //   b: {
-    //     to: [{ key_code: "rewind" }],
-    //   },
-    // },
-
     // r = "Raycast"
     r: {
       n: open("raycast://script-commands/dismiss-notifications"),
@@ -267,6 +254,7 @@ const rules: KarabinerRules[] = [
       h: open(
         "raycast://extensions/raycast/clipboard-history/clipboard-history"
       ),
+      j: open("raycast://extensions/gdsmith/jetbrains/recent"),
       1: open(
         "raycast://extensions/VladCuciureanu/toothpick/connect-favorite-device-1"
       ),
